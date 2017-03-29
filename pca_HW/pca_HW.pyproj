@@ -12,6 +12,9 @@
     <OutputPath>.</OutputPath>
     <Name>pca_HW</Name>
     <RootNamespace>pca_HW</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>{7d72acc2-170a-475b-8d50-76fabd7375c6}</InterpreterId>
+    <InterpreterVersion>3.5</InterpreterVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +26,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="pca_HW.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{7d72acc2-170a-475b-8d50-76fabd7375c6}\3.5" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
