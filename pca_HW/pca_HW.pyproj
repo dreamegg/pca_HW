@@ -13,7 +13,7 @@
     <Name>pca_HW</Name>
     <RootNamespace>pca_HW</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>{7d72acc2-170a-475b-8d50-76fabd7375c6}</InterpreterId>
+    <InterpreterId>{bf559043-2a4a-4214-ad1b-cfc833bf0af2}</InterpreterId>
     <InterpreterVersion>3.5</InterpreterVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -29,6 +29,8 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="{7d72acc2-170a-475b-8d50-76fabd7375c6}\3.5" />
+    <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\3.5" />
+    <InterpreterReference Include="{bf559043-2a4a-4214-ad1b-cfc833bf0af2}\3.5" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

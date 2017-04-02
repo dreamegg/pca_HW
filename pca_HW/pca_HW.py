@@ -2,31 +2,20 @@
 #with codecs.open("face01.pgm", "r",encoding='utf-8', errors='ignore') as f:
 import numpy as np
 from matplotlib import pyplot
-import codecs
-import image
 
 class PGM(object):
     def __init__(self, filepath):
+        with open(filepath, "r",encoding='utf-8', errors='ignore') as f:
+            header = f.read(15)
+            print(header)
+            self.type = header[0:2]
+            self.width = int(header[3:6])
+            self.height = int(header[7:10])
+            self.maxval = int(header[11:14])
+            self.datalen = self.width* self.height
 
-        with codecs.open(filepath, "r",encoding='utf-8', errors='ignore') as f:
-            # suppose all header info in first line:
-            info = f.readline().split()
-            self.type = info[0]
-            info = f.readline().split()        
-            self.width = int(info[0])
-            self.height = 98 #int(info[1])
-            info = f.readline().split()        
-            self.maxval = int(info[0])
-            size = self.width * self.height
+            self.data = f.read(self.datalen)
 
-            buffer = f.read()
-            print(len(buffer))
-            self.data =[]
-            for i in range(size):
-                self.data.append(ord(buffer[i]))
-            print(self.data)
-            np.reshape(self.data, (self.width , int(len(buffer)/self.width)))
-            print(self.data)
 
 
     def get_img(self):
@@ -43,8 +32,7 @@ class PGM(object):
         return self.data
 
     Image = property(get_img)
-
+'''
 mypgm = PGM('face01.pgm')
-image = mypgm.get_imagedata
 #pyplot.imshow(image, pyplot.cm.gray)
 pyplot.show()
