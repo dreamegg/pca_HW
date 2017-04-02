@@ -32,6 +32,11 @@
     <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\3.5" />
     <InterpreterReference Include="{bf559043-2a4a-4214-ad1b-cfc833bf0af2}\3.5" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="1223" />
+    <Content Include="ev.mat" />
+    <Content Include="face01.pgm" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
