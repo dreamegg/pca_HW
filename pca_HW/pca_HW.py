@@ -1,61 +1,75 @@
 
-#with codecs.open("face01.pgm", "r",encoding='utf-8', errors='ignore') as f:
+#-*- coding: utf-8 -*-
+
 import numpy as np
-import matplotlib.pyplot as plt
-import codecs
-import image
+import PIL
+import os
+from matplotlib import pyplot
+
+IMGSZIE = 128
 
 class PGM(object):
     def __init__(self, filepath):
-        with codecs.open(filepath, "r",encoding='utf-8', errors='ignore') as f:
-            # suppose all header info in first line:
-            info = f.readline().split()
-            self.type = info[0]
-            info = f.readline().split()        
-            self.width = int(info[0])
-            self.height = 98 #int(info[1])
-            info = f.readline().split()        
-            self.maxval = int(info[0])
-            size = self.width * self.height
+        with open(filepath, "rb") as f:
+            #header = f.read(15)
+            #print(header)
+            self.type = "p5"#header[0:2]
+            self.width = IMGSZIE #int(header[3:6])-3
+            self.height = IMGSZIE #int(header[7:10])
+            self.maxval = 256 #int(header[11:14])
+            
+            self.datalen = self.width * self.height
+            self.data = f.read(self.datalen)
+            self.dataf =np.zeros((self.height, self.width))
 
-            buffer = f.read()
-            print(len(buffer))
-            self.data =[]
-            for i in range(size):
-                self.data.append(ord(buffer[i]))
-            print(self.data)
+            for i in range(len(self.data)-1) :
+                y = i%self.width
+                x = int(i/self.width)
 
-
-    def get_img(self):
-        if self._img is None:
-            # only executed once
-            size = (self.width, self.height)
-            mode = 'L'
-            data = self.data
-            self.img = Image.frombuffer(mode, size, data)
-
-        return self.img
+                if self.data[i] == '' :
+                    self.dataf[x][y] = int(0)
+                else  :
+                    self.dataf[x][y] = int(self.data[i])
+                #print (self.dataf[x][y])
+                
+            #print (self.dataf)
 
     def get_imagedata(self):
-        return self.data
+        return self.dataf
 
-    Image = property(get_img)
+Train_dir = "./data/rawdata"
 
-from PIL import Image
-import os
+facelist =[]
+filenames = os.listdir(Train_dir)
 
-print(os.listdir('./data/faces_training'))
+faceCount = 0
+for filename in filenames:
+    full_filename = os.path.join(Train_dir, filename)
+    print (full_filename)
+    train_pgm = PGM(full_filename)
+    facelist.append(np.reshape(train_pgm.get_imagedata(), IMGSZIE*IMGSZIE))
+    faceCount = faceCount + 1
+  
+print(facelist)
 
-filenames = os.listdir('./data/faces_training')
-A =
-I=0;
-for filename in filenames:  
-    full_filename = os.path.join('./data/faces_training', filename)
-    print(full_filename)
-    PGM(full_filename)
+MeanMat =np.zeros((IMGSZIE * IMGSZIE),dtype=np.float)
+for i in range(IMGSZIE*IMGSZIE) :
+    for j in range (faceCount) :
+        MeanMat[i] = MeanMat[i] + facelist[j][i]
+    MeanMat[i] = MeanMat[i] / faceCount
 
-#mypgm = PGM('face01.pgm')
-#image = mypgm.get_imagedata
-#pyplot.imshow(image, pyplot.cm.gray)
-#plt.show()
+DbMat =np.zeros((faceCount,IMGSZIE * IMGSZIE),dtype=np.float)
+for i in range(IMGSZIE*IMGSZIE) :
+    for j in range (faceCount) :
+        DbMat[j][i] = facelist[j][i] - MeanMat[i]
 
+CovMat = (np.dot(DbMat,DbMat.T))/IMGSZIE * IMGSZIE 
+print (CovMat.shape)
+print (CovMat)
+
+#image = PIL.Image.open('face01.pgm')
+#print(image)
+#image.show()
+
+pyplot.imshow(np.reshape(MeanMat,(IMGSZIE,IMGSZIE)), pyplot.cm.gray)
+pyplot.show()
