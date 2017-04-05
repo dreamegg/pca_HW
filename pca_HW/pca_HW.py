@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 import numpy as np
+from numpy import linalg as LA
 import PIL
 import os
 from matplotlib import pyplot
@@ -45,13 +46,11 @@ filenames = os.listdir(Train_dir)
 faceCount = 0
 for filename in filenames:
     full_filename = os.path.join(Train_dir, filename)
-    print (full_filename)
+    #print (full_filename)
     train_pgm = PGM(full_filename)
     facelist.append(np.reshape(train_pgm.get_imagedata(), IMGSZIE*IMGSZIE))
     faceCount = faceCount + 1
   
-print(facelist)
-
 MeanMat =np.zeros((IMGSZIE * IMGSZIE),dtype=np.float)
 for i in range(IMGSZIE*IMGSZIE) :
     for j in range (faceCount) :
@@ -64,12 +63,25 @@ for i in range(IMGSZIE*IMGSZIE) :
         DbMat[j][i] = facelist[j][i] - MeanMat[i]
 
 CovMat = (np.dot(DbMat,DbMat.T))/IMGSZIE * IMGSZIE 
-print (CovMat.shape)
-print (CovMat)
+#CovMat = (np.dot(DbMat.T,DbMat))/IMGSZIE * IMGSZIE 
+print (CovMat.shape,DbMat.shape)
+print (DbMat)
+EigenValue, EigenVector = LA.eig(CovMat)
+
+print ("Eigen Value shape",EigenValue.shape, EigenValue)
+print ("Eigen Vaetor", EigenVector.shape, EigenVector)
+
+Result_Value = np.sort(EigenValue)
+Result_Value = Result_Value[::-1]
+print ("Result_Value", Result_Value[:10])
 
 #image = PIL.Image.open('face01.pgm')
 #print(image)
 #image.show()
 
-pyplot.imshow(np.reshape(MeanMat,(IMGSZIE,IMGSZIE)), pyplot.cm.gray)
-pyplot.show()
+for i in range(1) :
+    EigenFace = np.dot(DbMat[1],EigenVector[i].T)
+    print (i,DbMat[1].shape, EigenFace.shape)
+    pyplot.imshow(np.reshape(DbMat[:1],(IMGSZIE , IMGSZIE)), pyplot.cm.gray)
+    #pyplot.imshow(np.reshape(EigenFace,(IMGSZIE , IMGSZIE)), pyplot.cm.gray)
+    pyplot.show()
